@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const ListConversations = ({
   searchTerm,
@@ -25,8 +24,8 @@ export const ListConversations = ({
 
   const hightlightConversation = (conversation) => {
     selectConversation(conversation);
-    setSelectedConversation(conversation.peerAddress);
-    if (conversation.peerAddress) {
+    if (conversation && conversation.peerAddress) {
+      setSelectedConversation(conversation.peerAddress);
       console.log("Navigating to conversation:", conversation.consentState);
       navigate(`/dm/${conversation.peerAddress}`, {});
       if (isConsent && conversation.consentState !== "allowed") {
@@ -251,11 +250,10 @@ export const ListConversations = ({
         </small>
       );
     }
+
     return conversations.map((conversation, index) => {
       // Find the last message for this conversation by ID
-      const lastMessage =
-        lastMessages.find((msg) => msg.topic === conversation.topic)?.content ||
-        "...";
+      const lastMessage = "...";
 
       return (
         <li

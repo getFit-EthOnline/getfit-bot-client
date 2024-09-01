@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MessageInput } from "./MessageInput";
 import { MessageItem } from "./MessageItem";
 
@@ -87,6 +87,7 @@ export const MessageContainer = ({
     },
   };
 
+  console.log(messages, "messages");
   const updateMessages = (prevMessages, newMessage) => {
     const doesMessageExist = prevMessages.some(
       (existingMessage) => existingMessage.id === newMessage.id,

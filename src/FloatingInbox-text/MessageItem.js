@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { createWalletClient, custom } from "viem";
+import { spicy } from "viem/chains";
 import { Frame } from "../Frames/Frame";
 import {
   getFrameTitle,
-  isValidFrame,
   getOrderedButtons,
+  isValidFrame,
   isXmtpFrame,
 } from "../Frames/FrameInfo";
-import { createWalletClient, custom } from "viem";
-import { sepolia } from "viem/chains";
 
 import { FramesClient } from "@xmtp/frames-client";
 import { fetchFrameFromUrl } from "../Frames/utils"; // Ensure you have this helper or implement it
 
 const walletClient = createWalletClient({
-  chain: sepolia,
+  chain: spicy,
   transport: custom(window.ethereum),
 });
 
@@ -128,6 +128,7 @@ export const MessageItem = ({ message, senderAddress, client }) => {
           setFrameMetadata(completeTransactionMetadata);
         } else {
           const address = transactionInfo.params.to;
+          debugger;
 
           try {
             const hash = await walletClient.sendTransaction({
@@ -148,6 +149,7 @@ export const MessageItem = ({ message, senderAddress, client }) => {
             );
             setFrameMetadata(completeTransactionMetadata);
           } catch (e) {
+            debugger;
             console.log("Transaction error", e);
           }
         }
@@ -202,7 +204,13 @@ export const MessageItem = ({ message, senderAddress, client }) => {
 
   const renderMessage = (message) => {
     const codec = client.codecFor(message.contentType);
-    let content = message.content;
+    let content = "";
+
+    if (message.contentType.typeId === "reply") {
+      content = message.content.content;
+    } else {
+      content = message.content;
+    }
 
     if (frameMetadata?.url && showFrame)
       content = content.replace(frameMetadata?.url, "");

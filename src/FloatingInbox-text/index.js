@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { ReplyCodec } from "@xmtp/content-type-reply";
 import { Client } from "@xmtp/xmtp-js";
 import { ethers } from "ethers";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ConversationContainer } from "./ConversationContainer";
 import { MessageContainer } from "./MessageContainer";
-import { useNavigate } from "react-router-dom";
 
 export function FloatingInbox({
   wallet,
@@ -321,6 +322,7 @@ export function FloatingInbox({
         ...clientOptions,
         privateKeyOverride: keys,
       });
+      xmtp.registerCodec(new ReplyCodec());
       setClient(xmtp);
       setIsOnNetwork(!!xmtp.address);
     } catch (e) {
